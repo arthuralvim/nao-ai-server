@@ -1,0 +1,25 @@
+networks:
+  app-network:
+    name: hackathon-server-default-network
+    driver: bridge
+
+services:
+
+  backend:
+    networks:
+      - app-network
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    build:
+      context: .
+      dockerfile: ./backend/docker/api/Dockerfile
+    expose:
+      - 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/usr/src/backend
+    env_file:
+      - ./backend/.env
+    # environment:
+    #   APP_DATABASE_URL: postgresql://application_user@postgres:5432/app_database
+    #   APP_DATABASE_URL_TEST: postgresql://application_user@postgres:5432/app_database_test
