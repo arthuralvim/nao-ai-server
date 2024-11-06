@@ -1,0 +1,39 @@
+interactions:
+- request:
+    body: '{"model": "llama3.1", "prompt": "Quantos Planetas tem o sistema solar?
+      Considere que estamos no ano de 2005.", "stream": false}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '127'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.32.3
+    method: POST
+    uri: http://host.docker.internal:11434/api/generate
+  response:
+    body:
+      string: "{\"model\":\"llama3.1\",\"created_at\":\"2024-11-02T18:16:22.030261Z\",\"response\":\"Ao
+        longo do s\xE9culo XX, foram descobertas sete grandes planetas al\xE9m do
+        nosso Sol: Merc\xFArio, V\xEAnus, Terra, Marte, J\xFApiter, Saturno e Urano,
+        al\xE9m do Netuno. Em seguida, foi encontrada Plut\xE3o, considerado como
+        o oitavo planeta. No entanto, dado que seu tamanho \xE9 inferior ao de outros
+        planetas da nossa vizinhan\xE7a solar, esta descoberta desatou um debate entre
+        cientistas sobre se deveria ser chamado de \\\"planeta\\\".\",\"done\":true,\"done_reason\":\"stop\",\"context\":[128009,128006,882,128007,271,45320,437,29935,300,1592,297,29928,13238,30,7440,307,486,1744,68160,912,39124,409,220,1049,20,13,128009,128006,78191,128007,271,99412,1317,78,656,19266,64487,30388,11,55634,6697,677,53530,743,68,38546,11841,300,84769,656,70792,11730,25,25145,6792,10599,11,650,28119,355,11,50526,11,8290,68,11,622,102059,2058,11,50253,78,384,17229,5770,11,84769,656,9558,16711,13,5867,4915,85420,11,22419,23363,2649,1856,332,3496,11,2980,2172,8112,297,297,275,28316,3197,1955,13,2360,1218,13873,11,58892,1744,20607,70338,4046,38279,15190,409,57973,11841,300,3067,77839,48850,258,10118,17930,13238,11,15491,6697,677,23463,951,266,283,4543,11249,9465,89097,27771,15482,513,88481,689,1446,34809,2172,409,330,10609,1955,3343],\"total_duration\":2483906917,\"load_duration\":11053334,\"prompt_eval_count\":32,\"prompt_eval_duration\":88139000,\"eval_count\":119,\"eval_duration\":2383264000}"
+    headers:
+      Content-Length:
+      - '1429'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 02 Nov 2024 18:16:22 GMT
+    status:
+      code: 200
+      message: OK
+version: 1

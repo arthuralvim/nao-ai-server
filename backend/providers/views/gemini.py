@@ -1,5 +1,6 @@
 import google.generativeai as genai
 from django.conf import settings
+from google.ai import generativelanguage as glm
 from google.auth import exceptions as ga_exceptions
 from providers.serializers import (
     PromptSerializer,
@@ -12,20 +13,18 @@ from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
-genai.configure(api_key=settings.GEMINI_API_KEY)
 
-
-class ProvidersViewSet(ViewSet):
-
-    def list(self, request):
-        content = {"providers": ["gemini", "openai", "llama"]}
-        return Response(content, status.HTTP_200_OK)
+def get_client(key=None):
+    if key is None:
+        key = settings.GEMINI_API_KEY
+    return glm.GenerativeServiceClient(client_options={"api_key": key})
 
 
 class GeminiViewSet(ViewSet):
 
     @action(detail=False, url_path="status", url_name="status")
     def status(self, request):
+        genai.configure(api_key=settings.GEMINI_API_KEY)
         try:
             list(genai.list_models())
         except ga_exceptions.DefaultCredentialsError:
@@ -38,6 +37,7 @@ class GeminiViewSet(ViewSet):
 
     @action(detail=False, url_path="models", url_name="models")
     def models(self, request):
+        genai.configure(api_key=settings.GEMINI_API_KEY)
         content = {
             "models": [m.name[7:] for m in genai.list_models() if "generateContent" in m.supported_generation_methods],
         }
@@ -54,7 +54,9 @@ class GeminiViewSet(ViewSet):
         prompt = PromptSerializer(data=data)
 
         if prompt.is_valid():
+            client = get_client(key=prompt.validated_data.get("key", None))
             model = genai.GenerativeModel(prompt.validated_data["model"])
+            model._client = client
             response = model.generate_content(
                 build_prompt_gemini(prompt.validated_data["prompt"]),
             )

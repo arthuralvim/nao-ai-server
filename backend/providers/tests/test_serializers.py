@@ -4,6 +4,7 @@ from PIL.JpegImagePlugin import JpegImageFile
 from providers.serializers import (
     MessageSerializer,
     build_prompt_gemini,
+    build_prompt_llama,
     convert_base_64_to_file,
     convert_file_to_base_64,
 )
@@ -83,7 +84,7 @@ class TestMessageSerializer:
 
 class TestPromptBuilder:
 
-    def test_should_return_ordered_prompt(self):
+    def test_should_return_gemini_ordered_prompt(self):
         file_image = "./providers/tests/assets/file.jpg"
         file_sound = "./providers/tests/assets/file.wav"
         prompt = [
@@ -112,3 +113,29 @@ class TestPromptBuilder:
         assert prompt_gemini[1]["mime_type"] == "audio/wav"
         assert isinstance(prompt_gemini[2], str)
         assert isinstance(prompt_gemini[3], JpegImageFile)
+
+    def test_should_return_llama_ordered_prompt(self):
+        file_to_be_ignored = "./providers/tests/assets/file.wav"
+        prompt = [
+            {"index": 3, "message": "Descreva a imagem."},
+            {
+                "index": 1,
+                "message": (
+                    "O NAO é um robô humanóide considerado como um dos mais avançados robôs da atualidade. "
+                    "Seu uso está vinculado ao ensino e à pesquisa em Robótica e Inteligência Artificial em"
+                    " universidades e institutos de investigação. NAO também é usado para aprender ensinar "
+                    "programação nas escolas.  A seguir uma foto do NAO V6."
+                ),
+            },
+            {
+                "index": 4,
+                "file": SimpleUploadedFile(
+                    file_to_be_ignored, get_content_binary(file_to_be_ignored), content_type="image/jpeg"
+                ),
+            },
+        ]
+
+        prompt_llama = build_prompt_llama(model="llama3.1", prompt=prompt)
+        assert prompt_llama["model"] == "llama3.1"
+        assert isinstance(prompt_llama["prompt"], str)
+        assert prompt_llama["prompt"].endswith(prompt[0]["message"])

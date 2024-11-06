@@ -1,0 +1,28 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.3
+    method: GET
+    uri: http://host.docker.internal:11434/api/tags
+  response:
+    body:
+      string: '{"models":[{"name":"phi3:latest","model":"phi3:latest","modified_at":"2024-09-02T12:03:47.433354011-03:00","size":2176178913,"digest":"4f222292793889a9a40a020799cfd28d53f3e01af25d48e06c5e708610fc47e9","details":{"parent_model":"","format":"gguf","family":"phi3","families":["phi3"],"parameter_size":"3.8B","quantization_level":"Q4_0"}},{"name":"llama3.1:latest","model":"llama3.1:latest","modified_at":"2024-09-02T11:56:30.689004569-03:00","size":4661230720,"digest":"f66fc8dc39ea206e03ff6764fcc696b1b4dfb693f0b6ef751731dd4e6269046e","details":{"parent_model":"","format":"gguf","family":"llama","families":["llama"],"parameter_size":"8.0B","quantization_level":"Q4_0"}}]}'
+    headers:
+      Content-Length:
+      - '672'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 02 Nov 2024 18:16:17 GMT
+    status:
+      code: 200
+      message: OK
+version: 1

@@ -2,6 +2,7 @@ import base64
 import operator
 
 import filetype
+from django.conf import settings
 from drf_extra_fields.fields import Base64FileField
 from PIL import Image
 from rest_framework.serializers import (
@@ -23,7 +24,7 @@ class GeminiBase64File(Base64FileField):
 
 class MessageSerializer(Serializer):
     index = IntegerField()
-    message = CharField(required=False, max_length=500)
+    message = CharField(required=False, max_length=settings.MAX_MESSAGE_SIZE)
     file = GeminiBase64File(required=False)
 
     def validate(self, data):
@@ -37,6 +38,7 @@ class MessageSerializer(Serializer):
 class PromptSerializer(Serializer):
     model = CharField(required=True, allow_blank=True, max_length=100)
     prompt = ListField(child=MessageSerializer())
+    key = CharField(required=False, max_length=100)
 
 
 class ProviderResponseSerializer(Serializer):
@@ -70,3 +72,9 @@ def build_prompt_gemini(prompt):
     sorted_prompt = sorted(prompt, key=operator.itemgetter("index"))
     final_prompt = [preprocess_file(p["file"]) if "file" in p else p["message"] for p in sorted_prompt]
     return final_prompt
+
+
+def build_prompt_llama(model, prompt):
+    sorted_prompt = sorted(prompt, key=operator.itemgetter("index"))
+    final_prompt = " ".join([p["message"] for p in sorted_prompt if "file" not in p])
+    return {"model": model, "prompt": final_prompt, "stream": False}

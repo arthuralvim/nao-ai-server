@@ -7,7 +7,7 @@ Um servidor simples para auxiliar os Robôs NAO da Linha 3 do CETEC a acessarem 
 Primeiro, copie as variavéis de ambiente com os comandos abaixo:
 
 ```bash
-cp backend/default.env .env
+cp backend/default.env backend/.env
 ```
 
 Eles serão usadas pelo `docker-compose`. Novas variavéis devem ser adicinadas aqui.

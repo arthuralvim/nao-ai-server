@@ -19,12 +19,12 @@ RUN \
 
 RUN pip install poetry=="$POETRY_VERSION"
 
-COPY ../../backend/poetry.lock ../../backend/pyproject.toml /usr/src/backend/
+COPY ./backend/poetry.lock ./backend/pyproject.toml /usr/src/backend/
 WORKDIR /usr/src/backend
 RUN poetry config virtualenvs.create false
 RUN poetry install --no-interaction --no-root
 
-COPY ../../backend /usr/src/backend
+COPY ./backend /usr/src/backend
 WORKDIR /usr/src/backend
 
 EXPOSE 8000

@@ -4,14 +4,6 @@ from providers.serializers import convert_file_to_base_64
 from rest_framework import status as status_code
 
 
-class TestProviders:
-
-    def test_should_return_available_providers(self, api_client):
-        response = api_client.get(reverse("api:providers-list"))
-        assert response.data["providers"] == ["gemini", "openai", "llama"]
-        assert response.status_code == status_code.HTTP_200_OK
-
-
 class TestProviderGemini:
 
     def test_should_return_correct_url(self):
@@ -48,6 +40,23 @@ class TestProviderGemini:
             "prompt": [
                 {"index": 0, "message": "Quantos Planetas tem o sistema solar?"},
             ],
+        }
+        response = api_client.post(reverse("api:gemini-prompt"), payload, format="json")
+        assert response.data["response"] is not None
+        assert response.data["provider"] == "gemini"
+        assert response.status_code == status_code.HTTP_200_OK
+
+    @pytest.mark.default_cassette("gemini_prompt_key.yaml")
+    @pytest.mark.vcr
+    def test_should_return_gemini_response_for_prompt_when_passing_key(self, api_client, settings):
+        key = settings.GEMINI_API_KEY
+        settings.GEMINI_API_KEY = None
+        payload = {
+            "model": "gemini-1.5-flash",
+            "prompt": [
+                {"index": 0, "message": "Quantos Planetas tem o sistema solar?"},
+            ],
+            "key": key,
         }
         response = api_client.post(reverse("api:gemini-prompt"), payload, format="json")
         assert response.data["response"] is not None

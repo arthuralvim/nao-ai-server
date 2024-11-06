@@ -100,3 +100,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 #  A.I. PROVIDERS
 
 GEMINI_API_KEY = config("GEMINI_API_KEY", default=None)
+
+LLAMA_SERVER_URL = config("LLAMA_SERVER_URL", default="localhost")
+LLAMA_SERVER_PORT = config("LLAMA_SERVER_PORT", default=11434)
+LLAMA_ENDPOINT = f"http://{LLAMA_SERVER_URL}:{LLAMA_SERVER_PORT}"
+
+MAX_MESSAGE_SIZE = config("MAX_MESSAGE_SIZE", default=1000, cast=int)
